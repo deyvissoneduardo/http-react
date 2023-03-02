@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { useState, useEffect } from "react";
+import { useFetch } from "./hooks/useFetch";
 
 const url = "http://localhost:3000/products";
 
@@ -9,15 +10,7 @@ function App() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
 
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch(url);
-      const data = await res.json();
-      setProducts(data);
-    }
-
-    // fetchData();
-  });
+  const {data: items} = useFetch(url);
 
   const handlerSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +38,7 @@ function App() {
     <div className="App">
       <h1>Lista de Produtos</h1>
       <ul>
-        {products.map((product) => (
+        {items && items.map((product) => (
           <li key={product.id}>
             {product.name} - R${product.price}
           </li>
